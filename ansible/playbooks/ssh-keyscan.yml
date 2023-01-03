@@ -1,0 +1,17 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+    - name: Add fingerprints to known_hosts
+      known_hosts:
+        name: "{{ item }}"
+        key: "{{ lookup('pipe', 'ssh-keyscan {{ item }},`dig +short {{ item }}`') }}"
+      with_items:
+        - 192.168.248.137
+        - 192.168.248.138
+        - 192.168.248.139
+        - 192.168.248.140
+        - 192.168.248.141
+        - 192.168.248.142
+        - 192.168.248.143

@@ -1,0 +1,12 @@
+- hosts: all
+  become: true
+  tasks:
+    - name: line insert
+      lineinfile:
+        path: /etc/rsyslog.conf
+        line: '*.* @192.168.248.143:514'
+        insertbefore: EOF
+    - name: restart rsyslog service
+      service:
+        name: rsyslog
+        state: restarted

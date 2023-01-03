@@ -1,0 +1,23 @@
+---
+- hosts: searchheads
+  become: true
+  tasks:
+  - name: copy the searchhead ta to the searchhead
+    copy:
+      src: /home/vagrant/configs/{{ item }}
+      dest: /opt/splunk/etc/apps
+    with_items:
+      - IDX_pan
+  - name: set ownership to splunk user
+    file:
+      dest: /opt/splunk/etc/apps/{{ item }}
+      owner: splunk
+      group: splunk
+      mode: u=rwX,g=rX,o=rX
+      recurse: yes
+    with_items:
+    - IDX_pan
+  - name: restart Splunkd.service
+    service:
+      name: Splunkd.service
+      state: restarted

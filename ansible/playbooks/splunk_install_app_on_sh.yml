@@ -1,0 +1,26 @@
+---
+- hosts: searchheads
+  become: true
+  tasks:
+  - name: copy the app(s) to the searchheads
+    copy:
+      src: /home/vagrant/configs/{{ item }}
+      dest: /opt/splunk/etc/apps
+    with_items:
+      - palo-alto-networks-add-on-for-splunk_710.tgz
+  - name: install Splunk app
+    command: 
+      cmd: tar -xvf /opt/splunk/etc/apps/{{ item }} -C /opt/splunk/etc/apps
+    with_items:
+      - palo-alto-networks-add-on-for-splunk_710.tgz
+  - name: set ownership to splunk user
+    file:
+      dest: /opt/splunk/etc/apps/
+      owner: splunk
+      group: splunk
+      mode: u=rwX,g=rX,o=rX
+      recurse: yes
+  - name: restart Splunkd.service
+    service:
+      name: Splunkd.service
+      state: restarted

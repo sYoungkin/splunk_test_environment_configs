@@ -1,0 +1,7 @@
+[]
+access = read : [ * ], write : [ admin ]
+export = system
+
+[server/clustering]
+version = 8.2.4
+modtime = 1671461541.284552000
